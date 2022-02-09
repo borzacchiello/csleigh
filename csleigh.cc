@@ -89,9 +89,9 @@ public:
 class PcodeEmitCacher : public PcodeEmit
 {
 public:
-    vector<unique_ptr<LPX(Varnode)>> m_vars;
-    vector<LPX(PcodeOp)>             m_ops;
-    uintm                            m_uniq;
+    vector<unique_ptr<LPX(Varnode)[]>> m_vars;
+    vector<LPX(PcodeOp)>               m_ops;
+    uintm                              m_uniq;
 
     PcodeEmitCacher()
     : m_uniq(0)
