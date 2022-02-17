@@ -223,9 +223,34 @@ LPX(AddrSpace) LPX(Addr_getSpaceFromConst)(LPX(Address) *a);
 const char *LPX(AddrSpace_getName)(LPX(AddrSpace) as);
 
 /*
+ * AddrSpace::getId
+ */
+const int4 LPX(AddrSpace_getId)(LPX(AddrSpace) as);
+
+/*
  * Sleigh::getRegisterName
  */
 const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as, uintb off, int4 size);
+
+/*
+ * Sleigh::getDefaultCodeSpace
+ */
+const LPX(AddrSpace) LPX(Sleigh_getDefaultCodeSpace)(LPX(Context) c);
+
+/*
+ * Sleigh::getDefaultDataSpace
+ */
+const LPX(AddrSpace) LPX(Sleigh_getDefaultDataSpace)(LPX(Context) c);
+
+/*
+ * Sleigh::getgetConstantSpace
+ */
+const LPX(AddrSpace) LPX(Sleigh_getConstantSpace)(LPX(Context) c);
+
+/*
+ * Sleigh::getUniqueSpace
+ */
+const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c);
 
 #ifdef __cplusplus
 } /* extern "C" { */

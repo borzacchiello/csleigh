@@ -373,9 +373,42 @@ const char *LPX(AddrSpace_getName)(LPX(AddrSpace) as)
     return ((AddrSpace *)as)->getName().c_str();
 }
 
+const int4 LPX(AddrSpace_getId)(LPX(AddrSpace) as)
+{
+    return ((AddrSpace *)as)->getIndex();
+}
+
 const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as,
                                         uintb off, int4 size)
 {
     return ((TranslationContext *)c)->Sleigh_getRegisterName(
         (AddrSpace *)as, off, size);
+}
+
+const LPX(AddrSpace) LPX(Sleigh_getDefaultCodeSpace)(LPX(Context) c)
+{
+    AddrSpace *space =
+        ((TranslationContext *)c)->m_sleigh->getDefaultCodeSpace();
+    return (LPX(AddrSpace))space;
+}
+
+const LPX(AddrSpace) LPX(Sleigh_getDefaultDataSpace)(LPX(Context) c)
+{
+    AddrSpace *space =
+        ((TranslationContext *)c)->m_sleigh->getDefaultDataSpace();
+    return (LPX(AddrSpace))space;
+}
+
+const LPX(AddrSpace) LPX(Sleigh_getConstantSpace)(LPX(Context) c)
+{
+    AddrSpace *space =
+        ((TranslationContext *)c)->m_sleigh->getConstantSpace();
+    return (LPX(AddrSpace))space;
+}
+
+const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c)
+{
+    AddrSpace *space =
+        ((TranslationContext *)c)->m_sleigh->getUniqueSpace();
+    return (LPX(AddrSpace))space;
 }
