@@ -100,18 +100,7 @@ OPS_X
 #undef INV_OP
 } LPX(OpCode);
 
-const char* LPX(OpCodeName)(LPX(OpCode) op) {
-	switch (op) {
-#define DEC_OP(oid, oname, odesc) case OP(oname): return #oname;
-#define INV_OP(oid, oname, odesc)
-OPS_X
-#undef DEC_OP
-#undef INV_OP
-		default:
-			break;
-	}
-	return "unknown";
-};
+const char* LPX(OpCodeName)(LPX(OpCode) op);
 
 /* Opaque types */
 typedef void *LPX(Context);
@@ -231,6 +220,11 @@ const int4 LPX(AddrSpace_getId)(LPX(AddrSpace) as);
  * Sleigh::getRegisterName
  */
 const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as, uintb off, int4 size);
+
+/*
+ * Sleigh::getRegister
+ */
+const LPX(Varnode) LPX(Sleigh_getRegister)(LPX(Context) c, const char* name);
 
 /*
  * Sleigh::getDefaultCodeSpace

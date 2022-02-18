@@ -312,6 +312,17 @@ public:
         m_register_name_cache = m_sleigh->getRegisterName(as, off, size);
         return m_register_name_cache.c_str();
     }
+
+    const LPX(Varnode) Sleigh_getRegister(const char* name)
+    {
+        const VarnodeData& varnode = m_sleigh->getRegister(std::string(name));
+        LPX(Varnode) res = {
+            .space = varnode.space,
+            .offset = varnode.offset,
+            .size = varnode.size
+        };
+        return res;
+    }
 };
 
 
@@ -385,6 +396,12 @@ const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as,
         (AddrSpace *)as, off, size);
 }
 
+const LPX(Varnode) LPX(Sleigh_getRegister)(LPX(Context) c, const char* name)
+{
+    return ((TranslationContext *)c)->Sleigh_getRegister(name);
+}
+
+
 const LPX(AddrSpace) LPX(Sleigh_getDefaultCodeSpace)(LPX(Context) c)
 {
     AddrSpace *space =
@@ -412,3 +429,16 @@ const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c)
         ((TranslationContext *)c)->m_sleigh->getUniqueSpace();
     return (LPX(AddrSpace))space;
 }
+
+const char* LPX(OpCodeName)(LPX(OpCode) op) {
+	switch (op) {
+#define DEC_OP(oid, oname, odesc) case OP(oname): return #oname;
+#define INV_OP(oid, oname, odesc)
+OPS_X
+#undef DEC_OP
+#undef INV_OP
+		default:
+			break;
+	}
+	return "unknown";
+};
