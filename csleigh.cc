@@ -430,6 +430,14 @@ const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c)
     return (LPX(AddrSpace))space;
 }
 
+const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name)
+{
+    AddrSpace *space =
+        ((TranslationContext *)c)->m_sleigh->getSpaceByName(std::string(name));
+    return (LPX(AddrSpace))space;
+}
+
+
 const char* LPX(OpCodeName)(LPX(OpCode) op) {
 	switch (op) {
 #define DEC_OP(oid, oname, odesc) case OP(oname): return #oname;

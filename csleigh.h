@@ -246,6 +246,11 @@ const LPX(AddrSpace) LPX(Sleigh_getConstantSpace)(LPX(Context) c);
  */
 const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c);
 
+/*
+ * Sleigh::getSpaceByName
+ */
+const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name);
+
 #ifdef __cplusplus
 } /* extern "C" { */
 #endif
