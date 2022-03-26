@@ -4,9 +4,13 @@
 #ifndef CSLEIGH_H
 #define CSLEIGH_H
 
+#include <memory>
 #include <stdbool.h>
 
 #include "sleigh/types.h"
+#include "sleigh/float.hh"
+
+typedef std::shared_ptr<const FloatFormat> FloatFormatPtr;
 
 /* Names in this header are prefixed to avoid collisions with SLEIGH. */
 #define LPX(name) csleigh_ ## name
@@ -250,6 +254,11 @@ const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c);
  * Sleigh::getSpaceByName
  */
 const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name);
+
+/*
+ * Sleigh::getSpaceByName
+ */
+std::vector<const FloatFormat*> LPX(Sleigh_getFloatFormats)(LPX(Context) c);
 
 #ifdef __cplusplus
 } /* extern "C" { */
