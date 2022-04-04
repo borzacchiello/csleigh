@@ -28,7 +28,7 @@ add_executable(sleigh
 	${sleigh_source}
 )
 
-add_library(csleigh SHARED
+add_library(csleigh STATIC
 	csleigh.cc
 	${sleigh_source}
 )
