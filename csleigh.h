@@ -258,7 +258,7 @@ const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name
 /*
  * Sleigh::getSpaceByName
  */
-std::vector<const FloatFormat*> LPX(Sleigh_getFloatFormats)(LPX(Context) c);
+int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** float_formats, size_t* o_size);
 
 #ifdef __cplusplus
 } /* extern "C" { */

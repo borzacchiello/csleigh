@@ -437,17 +437,26 @@ const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name
     return (LPX(AddrSpace))space;
 }
 
-std::vector<const FloatFormat*> LPX(Sleigh_getFloatFormats)(LPX(Context) c)
+int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** float_formats, size_t* o_size)
 {
     ((TranslationContext *)c)->m_sleigh->setDefaultFloatFormats();
 
-    std::vector<const FloatFormat*> res;
+    std::vector<const FloatFormat*> v;
     for (int i=0; i<32; ++i) {
         const FloatFormat* ff = ((TranslationContext *)c)->m_sleigh->getFloatFormat(i);
         if (ff)
-            res.push_back(ff);
+            v.push_back(ff);
     }
-    return res;
+
+    FloatFormat** res =
+        (FloatFormat**)malloc(sizeof(const FloatFormat*) * v.size());
+
+    for (uint64_t i = 0; i < v.size(); ++i)
+        res[i] = (FloatFormat*)v.at(i);
+
+    *o_size = v.size();
+    *float_formats = (FloatFormat* const*)res;
+    return 1;
 }
 
 const char* LPX(OpCodeName)(LPX(OpCode) op) {
