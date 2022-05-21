@@ -479,9 +479,9 @@ int LPX(Sleigh_getAllRegisters)(LPX(Context) c, LPX(Register)** o_regs, size_t* 
     int i = 0;
     for (const auto& [varnode, name] : regmap) {
         LPX(Varnode) v = {
+            .space  = (LPX(AddrSpace))varnode.space,
             .offset = varnode.offset,
             .size   = varnode.size,
-            .space  = (LPX(AddrSpace))varnode.space
         };
         strncpy(
             regs[i].name,
