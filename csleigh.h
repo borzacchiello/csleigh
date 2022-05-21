@@ -4,19 +4,20 @@
 #ifndef CSLEIGH_H
 #define CSLEIGH_H
 
-#include <memory>
 #include <stdbool.h>
 
 #include "sleigh/types.h"
 #include "sleigh/float.hh"
-
-typedef std::shared_ptr<const FloatFormat> FloatFormatPtr;
 
 /* Names in this header are prefixed to avoid collisions with SLEIGH. */
 #define LPX(name) csleigh_ ## name
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifdef RETURN
+#undef RETURN
 #endif
 
 #define OPS_X \
@@ -109,6 +110,7 @@ const char* LPX(OpCodeName)(LPX(OpCode) op);
 /* Opaque types */
 typedef void *LPX(Context);
 typedef void *LPX(AddrSpace);
+typedef void *LPX(FloatFormat);
 
 typedef struct {
 	LPX(AddrSpace) space;
@@ -261,7 +263,7 @@ const LPX(AddrSpace) LPX(Sleigh_getUniqueSpace)(LPX(Context) c);
 const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name);
 
 /*
- * Sleigh::getSpaceByName
+ * Sleigh::getFloatFormats
  */
 int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** o_float_formats, size_t* o_size);
 
