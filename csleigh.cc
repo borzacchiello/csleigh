@@ -396,11 +396,20 @@ const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as,
         (AddrSpace *)as, off, size);
 }
 
-const LPX(Varnode) LPX(Sleigh_getRegister)(LPX(Context) c, const char* name)
+int LPX(Sleigh_getRegister)(LPX(Context) c, const char* name, LPX(Register)* o_reg)
 {
-    return ((TranslationContext *)c)->Sleigh_getRegister(name);
-}
+    LPX(Varnode) varnode;
+    try {
+        varnode = ((TranslationContext *)c)->Sleigh_getRegister(name);
+    } catch (const SleighError& e) {
+        return 0;
+    }
 
+    memset(o_reg, 0, sizeof(LPX(Register)));
+    strncpy(o_reg->name, name, sizeof(o_reg->name)-1);
+    o_reg->varnode = varnode;
+    return 1;
+}
 
 const LPX(AddrSpace) LPX(Sleigh_getDefaultCodeSpace)(LPX(Context) c)
 {
@@ -437,7 +446,7 @@ const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name
     return (LPX(AddrSpace))space;
 }
 
-int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** float_formats, size_t* o_size)
+int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** o_float_formats, size_t* o_size)
 {
     ((TranslationContext *)c)->m_sleigh->setDefaultFloatFormats();
 
@@ -455,7 +464,35 @@ int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** float_forma
         res[i] = (FloatFormat*)v.at(i);
 
     *o_size = v.size();
-    *float_formats = (FloatFormat* const*)res;
+    *o_float_formats = (FloatFormat* const*)res;
+    return 1;
+}
+
+int LPX(Sleigh_getAllRegisters)(LPX(Context) c, LPX(Register)** o_regs, size_t* o_size)
+{
+    map<VarnodeData, string> regmap;
+    ((TranslationContext *)c)->m_sleigh->getAllRegisters(regmap);
+
+    LPX(Register)* regs = (LPX(Register)*)calloc(
+        sizeof(LPX(Register)), regmap.size());
+
+    int i = 0;
+    for (const auto& [varnode, name] : regmap) {
+        LPX(Varnode) v = {
+            .offset = varnode.offset,
+            .size   = varnode.size,
+            .space  = (LPX(AddrSpace))varnode.space
+        };
+        strncpy(
+            regs[i].name,
+            name.c_str(),
+            sizeof(regs[i].name) - 1UL);
+        regs[i].varnode = v;
+        i++;
+    }
+
+    *o_size = regmap.size();
+    *o_regs = regs;
     return 1;
 }
 

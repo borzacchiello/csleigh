@@ -122,6 +122,11 @@ typedef struct {
 } LPX(Varnode);
 
 typedef struct {
+	char         name[32];
+	LPX(Varnode) varnode;
+} LPX(Register);
+
+typedef struct {
 	LPX(Address) pc;
 	uintm        uniq;
 	uintm        order;
@@ -228,7 +233,7 @@ const char *LPX(Sleigh_getRegisterName)(LPX(Context) c, LPX(AddrSpace) as, uintb
 /*
  * Sleigh::getRegister
  */
-const LPX(Varnode) LPX(Sleigh_getRegister)(LPX(Context) c, const char* name);
+int LPX(Sleigh_getRegister)(LPX(Context) c, const char* name, LPX(Register)* o_reg);
 
 /*
  * Sleigh::getDefaultCodeSpace
@@ -258,7 +263,12 @@ const LPX(AddrSpace) LPX(Sleigh_getSpaceByName)(LPX(Context) c, const char* name
 /*
  * Sleigh::getSpaceByName
  */
-int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** float_formats, size_t* o_size);
+int LPX(Sleigh_getFloatFormats)(LPX(Context) c, FloatFormat* const** o_float_formats, size_t* o_size);
+
+/*
+ * Sleigh::getAllRegisters
+ */
+int LPX(Sleigh_getAllRegisters)(LPX(Context) c, LPX(Register)** o_regs, size_t* o_size);
 
 #ifdef __cplusplus
 } /* extern "C" { */
