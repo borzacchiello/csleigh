@@ -6,6 +6,7 @@
 
 #include <stdbool.h>
 
+// FIXME: not C apis
 #include "sleigh/types.h"
 #include "sleigh/float.hh"
 
@@ -15,6 +16,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// FIXME: find a better way
+#define csleigh_CALLOTHER_SYSCALL 5
 
 #ifdef RETURN
 #undef RETURN
