@@ -1,6 +1,7 @@
 //
 // Minimal SLEIGH library C API, for disassembly and translation to P-code.
 //
+#include <memory>
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
