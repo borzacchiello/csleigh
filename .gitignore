@@ -1,1 +1,10 @@
 build/
+processors/*/src
+processors/*/temp
+processors/*/scripts
+processors/*/resources
+processors/*/ghidra_scripts
+
+*.sla
+*.manifest
+*.gradle
