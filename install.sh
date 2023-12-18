@@ -16,9 +16,9 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j12 || exit 1
 
 ./sleigh_builder -a ../processors
-[ -d /usr/share/sleigh ] || sudo mkdir /usr/share/sleigh
+[ -d /usr/local/share/sleigh ] || sudo mkdir /usr/local/share/sleigh
 
-sudo cp -r ../processors /usr/share/sleigh
+sudo cp -r ../processors /usr/local/share/sleigh
 sudo make install
 
 popd

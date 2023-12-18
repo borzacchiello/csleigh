@@ -398,7 +398,7 @@ sleigh_ctx_t sleigh_create_context(sleigh_arch_t arch, sleigh_processor_t proc)
         if (!directory_exists(proc_dir))
             proc_dir = "./sleigh/processors";
         if (!directory_exists(proc_dir))
-            proc_dir = "/usr/share/sleigh/processors";
+            proc_dir = "/usr/local/share/sleigh/processors";
     }
     if (!proc_dir) {
         last_error = "unable to find \"processors\" directory";
