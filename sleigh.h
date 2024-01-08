@@ -13,6 +13,7 @@ typedef enum sleigh_arch_t {
     SLEIGH_ARCH_INVALID = 0,
     SLEIGH_ARCH_X86_64  = 1,
     SLEIGH_ARCH_X86     = 2,
+    SLEIGH_ARCH_ARM     = 3,
 } sleigh_arch_t;
 
 typedef enum sleigh_processor_t {
@@ -21,6 +22,8 @@ typedef enum sleigh_processor_t {
     SLEIGH_PROC_X86_16      = 2,
     SLEIGH_PROC_X86_16_REAL = 3,
     SLEIGH_PROC_X86         = 4,
+    SLEIGH_PROC_ARM7LE      = 5,
+    SLEIGH_PROC_ARM7BE      = 6,
 } sleigh_processor_t;
 
 #define OPS_X                                                                  \

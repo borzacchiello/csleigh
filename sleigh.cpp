@@ -448,6 +448,25 @@ sleigh_ctx_t sleigh_create_context(sleigh_arch_t arch, sleigh_processor_t proc)
                     return NULL;
             }
         } break;
+        case SLEIGH_ARCH_ARM: {
+            switch (proc) {
+                case SLEIGH_PROC_ARM7LE: {
+                    sla = std::string(proc_dir) +
+                          std::string("/ARM/data/languages/ARM7_le.sla");
+                    pspec = std::string(proc_dir) +
+                            std::string("/ARM/data/languages/ARM7_le.pspec");
+                } break;
+                case SLEIGH_PROC_ARM7BE: {
+                    sla = std::string(proc_dir) +
+                          std::string("/ARM/data/languages/ARM7_be.sla");
+                    pspec = std::string(proc_dir) +
+                            std::string("/ARM/data/languages/ARM7_be.pspec");
+                } break;
+                default:
+                    last_error = "unexpected arch-proc combination";
+                    return NULL;
+            }
+        } break;
         default:
             last_error = "unexpected arch combination";
             return NULL;
