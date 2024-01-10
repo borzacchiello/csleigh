@@ -46,7 +46,7 @@ static ghidra::Element* getChildByName(const ghidra::Element* el,
 
 class SimpleLoadImage : public ghidra::LoadImage
 {
-    uint8_t              m_baseaddr;
+    uint64_t             m_baseaddr;
     uint32_t             m_length;
     const unsigned char* m_data;
 
@@ -58,7 +58,7 @@ class SimpleLoadImage : public ghidra::LoadImage
         m_length   = 0;
     }
 
-    void setData(uint8_t ad, const unsigned char* ptr, int32_t sz)
+    void setData(uint64_t ad, const unsigned char* ptr, int32_t sz)
     {
         m_baseaddr = ad;
         m_data     = ptr;
@@ -67,8 +67,8 @@ class SimpleLoadImage : public ghidra::LoadImage
 
     void loadFill(uint8_t* ptr, int32_t size, const ghidra::Address& addr)
     {
-        uint8_t start = addr.getOffset();
-        uint8_t max   = m_baseaddr + m_length - 1;
+        uint64_t start = addr.getOffset();
+        uint64_t max   = m_baseaddr + m_length - 1;
 
         //
         // When decoding an instruction, SLEIGH will attempt to pull in several
@@ -83,13 +83,13 @@ class SimpleLoadImage : public ghidra::LoadImage
         }
 
         for (int32_t i = 0; i < size; i++) {
-            uint8_t curoff = start + i;
+            uint64_t curoff = start + i;
             if ((curoff < m_baseaddr) || (curoff > max)) {
                 ptr[i] = 0;
                 continue;
             }
-            uint8_t diff = curoff - m_baseaddr;
-            ptr[i]       = m_data[(int32_t)diff];
+            uint64_t diff = curoff - m_baseaddr;
+            ptr[i]        = m_data[(int32_t)diff];
         }
     }
 
