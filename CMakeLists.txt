@@ -30,7 +30,7 @@ add_executable(sleigh_builder
     sleigh/slghscan.cc
 	${sleigh_source})
 
-add_library(sleigh STATIC
+add_library(sleigh SHARED
 	sleigh.cpp
 	${sleigh_source})
     
