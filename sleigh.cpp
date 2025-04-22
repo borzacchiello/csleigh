@@ -16,12 +16,12 @@ namespace
 static std::string last_error = "";
 
 template <class T, class M>
-static inline constexpr ptrdiff_t offset_of(const M T::*member)
+static inline constexpr ptrdiff_t offset_of(const M T::* member)
 {
     return reinterpret_cast<ptrdiff_t>(&(reinterpret_cast<T*>(0)->*member));
 }
 template <class T, class M>
-static inline constexpr T* owner_of(M* ptr, const M T::*member)
+static inline constexpr T* owner_of(M* ptr, const M T::* member)
 {
     return reinterpret_cast<T*>(reinterpret_cast<intptr_t>(ptr) -
                                 offset_of(member));
@@ -454,13 +454,13 @@ sleigh_ctx_t sleigh_create_context(sleigh_arch_t arch, sleigh_processor_t proc)
                     sla = std::string(proc_dir) +
                           std::string("/ARM/data/languages/ARM7_le.sla");
                     pspec = std::string(proc_dir) +
-                            std::string("/ARM/data/languages/ARM7_le.pspec");
+                            std::string("/ARM/data/languages/ARMCortex.pspec");
                 } break;
                 case SLEIGH_PROC_ARM7BE: {
                     sla = std::string(proc_dir) +
                           std::string("/ARM/data/languages/ARM7_be.sla");
                     pspec = std::string(proc_dir) +
-                            std::string("/ARM/data/languages/ARM7_be.pspec");
+                            std::string("/ARM/data/languages/ARMCortex.pspec");
                 } break;
                 default:
                     last_error = "unexpected arch-proc combination";
@@ -601,6 +601,84 @@ const char* sleigh_opcode_name(sleigh_opcode_t op)
             break;
     }
     return "unknown";
+}
+
+static std::string varnode_to_string(TranslationContext*     ctx,
+                                     const sleigh_varnode_t* varnode)
+{
+    auto space     = static_cast<ghidra::AddrSpace*>(varnode->space);
+    auto spaceName = space->getName();
+
+    std::ostringstream outstream;
+    if (spaceName == "const") {
+        outstream << "0x" << std::hex << varnode->offset;
+    } else if (spaceName == "register") {
+        outstream << ctx->getRegisterName(space, varnode->offset,
+                                          varnode->size);
+    } else if (spaceName == "unique") {
+        outstream << "TMP_" << std::dec << varnode->offset << ":"
+                  << varnode->size;
+    } else {
+        outstream << spaceName << "[0x" << std::hex << varnode->offset << ":"
+                  << std::dec << varnode->size << "]";
+    }
+    return outstream.str();
+}
+
+char* sleigh_op_to_string(sleigh_ctx_t _ctx, const sleigh_pcodeop_t* op)
+{
+    if (!_ctx) {
+        last_error = "ctx is NULL";
+        return NULL;
+    }
+    auto ctx = static_cast<TranslationContext*>(_ctx);
+
+    std::string out;
+    out += sleigh_opcode_name(op->opcode);
+    out += " ";
+    switch (op->opcode) {
+        case SLEIGH_CPUI_LOAD: {
+            auto dst_space = sleigh_varnode_get_const_space(&op->inputs[0]);
+            if (dst_space == NULL) {
+                last_error = "invalid SLEIGH_CPUI_LOAD";
+                return NULL;
+            }
+            out += varnode_to_string(ctx, op->output);
+            out += " <- ";
+            out += sleigh_get_space_name(dst_space);
+            out += "[";
+            out += varnode_to_string(ctx, &op->inputs[1]);
+            out += "]";
+            break;
+        }
+        case SLEIGH_CPUI_STORE: {
+            auto dst_space = sleigh_varnode_get_const_space(&op->inputs[0]);
+            if (dst_space == NULL) {
+                last_error = "invalid SLEIGH_CPUI_STORE";
+                return NULL;
+            }
+            out += sleigh_get_space_name(dst_space);
+            out += "[";
+            out += varnode_to_string(ctx, &op->inputs[1]);
+            out += "]";
+            out += " <- ";
+            out += varnode_to_string(ctx, &op->inputs[2]);
+            break;
+        }
+        default: {
+            if (op->output != NULL) {
+                out += varnode_to_string(ctx, op->output);
+                out += " <- ";
+            }
+            for (uint32_t i = 0; i < op->inputs_count; ++i) {
+                if (i > 0)
+                    out += ", ";
+                out += varnode_to_string(ctx, &op->inputs[i]);
+            }
+            break;
+        }
+    }
+    return strdup(out.c_str());
 }
 
 // *** floats ***

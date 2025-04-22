@@ -206,6 +206,7 @@ sleigh_varnode_get_const_space(sleigh_varnode_t* varnode);
 
 const char* sleigh_get_last_error();
 const char* sleigh_opcode_name(sleigh_opcode_t op);
+char*       sleigh_op_to_string(sleigh_ctx_t ctx, const sleigh_pcodeop_t* op);
 
 #ifdef __cplusplus
 }
